@@ -1,28 +1,33 @@
-// fs- file system module
+/**
+ * Reads file synchronously and prepares a report with the data from a csv file
+ */
 const fs = require('fs');
 
-function countStudents(path) {
+function countStudents(filepath) {
+  let content;
   try {
-    const csv = fs.readFileSync(path, 'utf8').split('\n');
-    let students = csv.slice(1);
-    students = students.filter((student) => student);
-    console.log(`Number of students: ${students.length}`);
-    const fields = {};
-    for (const student of students) {
-        const row = student.split(',');
-        if (!fields[row[3]]) fields[row[3]] = [];
-        fields[row[3]].push(row[0]);
-    }
-    delete fields.field;
-    for (const field in fields) {
-      if (field) {
-        console.log(`Number of students in ${field}: ${fields[field].length}. List: ${fields[field].join(', ')}`);
-      }
-    }
-  }
-  catch (err) {
+    content = fs.readFileSync(filepath, { encoding: 'utf8', flag: 'r' });
+  } catch (err) {
     throw new Error('Cannot load the database');
   }
+
+  const records = content.split('\n');
+  const cslist = [];
+  const swelist = [];
+
+  records.forEach((record) => {
+    const field = record.split(',');
+    if (field !== [] && field !== null) {
+      if (field[3] === 'CS') {
+        cslist.push(field[0]);
+      } else if (field[3] === 'SWE') {
+        swelist.push(field[0]);
+      }
+    }
+  });
+  console.log(`Number of students: ${cslist.length + swelist.length}`);
+  console.log(`Number of students in CS: ${cslist.length}. List: ${cslist.join(', ')}`);
+  console.log(`Number of students in SWE: ${swelist.length}. List: ${swelist.join(', ')}`);
 }
 
 module.exports = countStudents;
