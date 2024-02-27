@@ -1,60 +1,54 @@
-const http = require("http");
-const fs = require("fs");
+const http = require('http');
+const fs = require('fs');
 
-const hostname = "127.0.0.1";
+const hostname = '127.0.0.1';
 const port = 1245;
 
-function countStudents(path) {
-    return new Promise((resolve, reject) => {
-        fs.readFile(path, "utf8", (err, data) => {
-            if (err) {
-                reject(new Error("Cannot load the database"));
-                return;
+function countStudents(filepath) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filepath, 'utf8', (err, data) => {
+      if (err) reject(new Error('Cannot load the database'));
+      else {
+        const dataRows = data.split('\n');
+        const computerScienceStudents = [];
+        const softwareEngineeringStudents = [];
+
+        dataRows.forEach((record) => {
+          const field = record.split(',');
+          if (field !== [] && field !== null) {
+            if (field[3] === 'CS') {
+              computerScienceStudents.push(field[0]);
+            } else if (field[3] === 'SWE') {
+              softwareEngineeringStudents.push(field[0]);
             }
-
-            const lines = data.trim().split('\n').map(line => line.trim()).filter(line => line !== '');
-            const students = lines.map(line => line.split(','));
-            const csStudents = students.filter(student => student[3] === "CS").map(student => student[0]);
-            const sweStudents = students.filter(student => student[3] === "SWE").map(student => student[0]);
-
-            resolve({
-                students: students.map(student => student[0]),
-                csStudents,
-                sweStudents
-            });
+          }
         });
+        let response = `Number of students: ${computerScienceStudents.length + softwareEngineeringStudents.length}\n`;
+        response += `Number of students in CS: ${computerScienceStudents.length}. List: ${computerScienceStudents.join(', ')}\n`;
+        response += `Number of students in SWE: ${softwareEngineeringStudents.length}. List: ${softwareEngineeringStudents.join(', ')}`;
+        resolve(response);
+      }
     });
+  });
 }
 
-const app = http.createServer(async (req, res) => {
-    res.setHeader("Content-Type", "text/plain");
-
-    if (req.url === '/') {
-        res.statusCode = 200;
-        res.end("Hello Holberton School!");
-    } else if (req.url === "/students") {
-        try {
-            const data = await countStudents(process.argv[2]);
-            const cslist = data.csStudents.join(", ");
-            const swelist = data.sweStudents.join(", ");
-
-            res.write("This is the list of our students\n");
-            res.write("Number of students: ${data.csStudents.length + data.sweStudents.length}\n");
-            res.write("Number of students in CS: ${data.csStudents.length}. List: ${cslist}\n");
-            res.write("Number of students in SWE: ${data.sweStudents.length}. List: ${swelist}");
-            res.end();
-        } catch (error) {
-            res.write("This is the list of our students\n");
-            res.end(error.message);
-        }
-    } else {
-        res.statusCode = 404;
-        res.end("Not found");
+const server = http.createServer(async (req, res) => {
+  res.setHeader('Content-Type', 'text/plain');
+  if (req.url === '/') {
+    res.write('Hello Holberton School!');
+  } else if (req.url === '/students') {
+    res.write('This is the list of our students\n');
+    const database = process.argv.length > 2 ? process.argv[2] : '';
+    try {
+      const content = await countStudents(database);
+      res.write(content);
+    } catch (err) {
+      res.write(err.message);
     }
+  }
+  res.end();
 });
 
-app.listen(port, hostname, () => {
-    console.log("Server running at http://${hostname}:${port}");
-});
+server.listen(port, hostname);
 
-module.exports = app;
+module.exports = server;
