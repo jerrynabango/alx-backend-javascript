@@ -1,4 +1,4 @@
-const fs = require("fs");
+const fs = require('fs');
 
 function countStudents(filepath) {
   let content;
@@ -23,8 +23,8 @@ function countStudents(filepath) {
     }
   });
   console.log(`Number of students: ${cslist.length + swelist.length}`);
-  console.log(`Number of students in CS: ${cslist.length}. List: ${cslist.join(', ')}`);
-  console.log(`Number of students in SWE: ${swelist.length}. List: ${swelist.join(', ')}`);
+  console.log(`Number of students in CS: ${cslist.length}. List: ${cslist.join(", ")}`);
+  console.log(`Number of students in SWE: ${swelist.length}. List: ${swelist.join(", ")}`);
 }
 
 module.exports = countStudents;
