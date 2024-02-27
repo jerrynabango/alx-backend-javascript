@@ -1,32 +1,31 @@
-// fs - file system module
 const fs = require('fs');
 
-function countStudents(path) {
-    return new Promise((resolve, reject) => {
-        fs.readFile(path, "utf8", (err, data) => {
-            if (err) {
-                reject(new Error('Cannot load the database'));
-                return;
-            }
-            const csv = data.split('\n');
-            let students = csv.slice(1);
-            students = students.filter((student) => student);
-            console.log('Number of students: ${students.length}');
-            const fields = {};
-            for (const student of students) {
-                const row = student.split(",");
-                if (!fields[row[3]]) fields[row[3]] = [];
-                fields[row[3]].push(row[0]);
-            }
-            delete fields.field;
-            for (const field in fields) {
-                if (field) {
-                    console.log(`Number of students in ${key}: ${value}. List: ${students[key].join(', ')}`);
-                }
-            }
-            resolve();
-        });
-    });
+function countStudents(filepath) {
+  let content;
+  try {
+    content = fs.readFileSync(filepath, { encoding: 'utf8', flag: 'r' });
+  } catch (err) {
+    throw new Error('Cannot load the database');
+  }
+
+  const dataRows = content.split('\n');
+  const computerScienceStudents = [];
+  const softwareEngineeringStudents = [];
+
+  dataRows.forEach((record) => {
+    const field = record.split(',');
+    if (field !== [] && field !== null) {
+      if (field[3] === 'CS') {
+        computerScienceStudents.push(field[0]);
+      } else if (field[3] === 'SWE') {
+        softwareEngineeringStudents.push(field[0]);
+      }
+    }
+  });
+
+  console.log(`Number of students: ${computerScienceStudents.length + softwareEngineeringStudents.length}`);
+  console.log(`Number of students in CS: ${computerScienceStudents.length}. List: ${computerScienceStudents.join(', ')}`);
+  console.log(`Number of students in SWE: ${softwareEngineeringStudents.length}. List: ${softwareEngineeringStudents.join(', ')}`);
 }
 
 module.exports = countStudents;
