@@ -5,27 +5,26 @@ function countStudents(filepath) {
   try {
     content = fs.readFileSync(filepath, { encoding: 'utf8', flag: 'r' });
   } catch (err) {
-    throw new Error('Cannot load the database');
+    throw new Error("Cannot load the database");
   }
 
   const records = content.split('\n');
-  const computerScienceStudents = [];
-  const softwareEngineeringStudents = [];
+  const cslist = [];
+  const swelist = [];
 
   records.forEach((record) => {
     const field = record.split(',');
     if (field !== [] && field !== null) {
       if (field[3] === 'CS') {
-        computerScienceStudents.push(field[0]);
+        cslist.push(field[0]);
       } else if (field[3] === 'SWE') {
-        softwareEngineeringStudents.push(field[0]);
+        swelist.push(field[0]);
       }
     }
   });
-
-  console.log(`Number of students: ${computerScienceStudents.length + softwareEngineeringStudents.length}`);
-  console.log(`Number of students in CS: ${computerScienceStudents.length}. List: ${computerScienceStudents.join(', ')}`);
-  console.log(`Number of students in SWE: ${softwareEngineeringStudents.length}. List: ${softwareEngineeringStudents.join(', ')}`);
+  console.log(`Number of students: ${cslist.length + swelist.length}`);
+  console.log(`Number of students in CS: ${cslist.length}. List: ${cslist.join(', ')}`);
+  console.log(`Number of students in SWE: ${swelist.length}. List: ${swelist.join(', ')}`);
 }
 
 module.exports = countStudents;
