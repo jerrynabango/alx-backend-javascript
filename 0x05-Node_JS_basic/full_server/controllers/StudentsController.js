@@ -1,14 +1,15 @@
+// Complex Server
 const readDatabase = require('../utils');
 
 class StudentsController {
   static getAllStudents(request, response) {
     readDatabase(process.argv[2].toString()).then((students) => {
-      const output = []; // Changed variable name from studentList to output
+      const output = [];
       output.push('This is the list of our students');
-      const departmentKeys = Object.keys(students); // Changed variable name from keys to departmentKeys
-      departmentKeys.sort();
-      for (let i = 0; i < departmentKeys.length; i += 1) {
-        output.push(`Number of students in ${departmentKeys[i]}: ${students[departmentKeys[i]].length}. List: ${students[departmentKeys[i]].join(', ')}`);
+      const keys = Object.keys(students);
+      keys.sort();
+      for (let i = 0; i < keys.length; i += 1) {
+        output.push(`Number of students in ${keys[i]}: ${students[keys[i]].length}. List: ${students[keys[i]].join(', ')}`);
       }
       response.status(200).send(output.join('\n'));
     }).catch(() => {
