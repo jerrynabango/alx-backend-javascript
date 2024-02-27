@@ -8,11 +8,11 @@ function countStudents(filepath) {
     throw new Error('Cannot load the database');
   }
 
-  const dataRows = content.split('\n');
+  const records = content.split('\n');
   const computerScienceStudents = [];
   const softwareEngineeringStudents = [];
 
-  dataRows.forEach((record) => {
+  records.forEach((record) => {
     const field = record.split(',');
     if (field !== [] && field !== null) {
       if (field[3] === 'CS') {
