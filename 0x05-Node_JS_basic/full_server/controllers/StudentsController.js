@@ -3,14 +3,14 @@ const readDatabase = require('../utils');
 class StudentsController {
   static getAllStudents(request, response) {
     readDatabase(process.argv[2].toString()).then((students) => {
-      const studentList = [];
-      studentList.push('This is the list of our students');
+      const output = []; // Changed variable name from studentList to output
+      output.push('This is the list of our students');
       const departmentKeys = Object.keys(students); // Changed variable name from keys to departmentKeys
       departmentKeys.sort();
       for (let i = 0; i < departmentKeys.length; i += 1) {
-        studentList.push(`Number of students in ${departmentKeys[i]}: ${students[departmentKeys[i]].length}. List: ${students[departmentKeys[i]].join(', ')}`);
+        output.push(`Number of students in ${departmentKeys[i]}: ${students[departmentKeys[i]].length}. List: ${students[departmentKeys[i]].join(', ')}`);
       }
-      response.status(200).send(studentList.join('\n'));
+      response.status(200).send(output.join('\n'));
     }).catch(() => {
       response.status(500).send('Cannot load the database');
     });
