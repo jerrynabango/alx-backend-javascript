@@ -1,30 +1,42 @@
-const fs = require('fs');
+const { readFile } = require('fs');
 
-function countStudents(filepath) {
-  let content;
-  try {
-    content = fs.readFileSync(filepath, { encoding: 'utf8', flag: 'r' });
-  } catch (err) {
-    throw new Error('Cannot load the database');
-  }
-
-  const records = content.split('\n');
-  const cslist = [];
-  const swelist = [];
-
-  records.forEach((record) => {
-    const field = record.split(',');
-    if (field !== [] && field !== null) {
-      if (field[3] === 'CS') {
-        cslist.push(field[0]);
-      } else if (field[3] === 'SWE') {
-        swelist.push(field[0]);
+function countStudents(fileName) {
+  const students = {};
+  const fields = {};
+  let length = 0;
+  return new Promise((resolve, reject) => {
+    readFile(fileName, (error, data) => {
+      if (error) {
+        reject(Error('Cannot load the database'));
+      } else {
+        const lines = data.toString().split('\n');
+        for (let i = 0; i < lines.length; i += 1) {
+          if (lines[i]) {
+            length += 1;
+            const field = lines[i].toString().split(',');
+            if (Object.prototype.hasOwnProperty.call(students, field[3])) {
+              students[field[3]].push(field[0]);
+            } else {
+              students[field[3]] = [field[0]];
+            }
+            if (Object.prototype.hasOwnProperty.call(fields, field[3])) {
+              fields[field[3]] += 1;
+            } else {
+              fields[field[3]] = 1;
+            }
+          }
+        }
+        const l = length - 1;
+        console.log(`Number of students: ${l}`);
+        for (const [key, value] of Object.entries(fields)) {
+          if (key !== 'field') {
+            console.log(`Number of students in ${key}: ${value}. List: ${students[key].join(', ')}`);
+          }
+        }
+        resolve(data);
       }
-    }
+    });
   });
-  console.log(`Number of students: ${cslist.length + swelist.length}`);
-  console.log(`Number of students in CS: ${cslist.length}. List: ${cslist.join(', ')}`);
-  console.log(`Number of students in SWE: ${swelist.length}. List: ${swelist.join(', ')}`);
 }
 
 module.exports = countStudents;
