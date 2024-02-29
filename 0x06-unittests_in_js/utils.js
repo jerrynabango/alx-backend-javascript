@@ -3,11 +3,11 @@ const Utils = {
       let result;
       if (type === 'SUM') {
         result = Math.round(a) + Math.round(b);
-      } else if (type === 'SUBTRACT') {
+      } else if (type === "SUBTRACT") {
         result = Math.round(a) - Math.round(b);
-      } else if (type === 'DIVIDE') {
+      } else if (type === "DIVIDE") {
         if (Math.abs(Math.round(b)) === 0) {
-          result = 'Error';
+          result = "Error";
         } else {
           result = Math.round(a) / Math.round(b);
         }
