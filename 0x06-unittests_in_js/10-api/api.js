@@ -1,20 +1,19 @@
-const express = require('express');
-
+const express = require("express");
 const app = express();
 const port = 7865;
 
 app.use(express.json());
 
-app.get('/', (_req, res) => {
-  res.send('Welcome to the payment system');
+app.get("/", (_req, res) => {
+  res.send("Welcome to the payment system");
 });
 
-app.get('/cart/:id([0-9]+)', (req, res) => {
+app.get("/cart/:id([0-9]+)", (req, res) => {
   const { id } = req.params;
   res.send(`Payment methods for cart ${id}`);
 });
 
-app.get('/available_payments', (_req, res) => {
+app.get("/available_payments", (_req, res) => {
   res.json({
     payment_methods: {
       credit_cards: true,
@@ -23,7 +22,7 @@ app.get('/available_payments', (_req, res) => {
   });
 });
 
-app.post('/login', (req, res) => {
+app.post("/login", (req, res) => {
   const { userName } = req.body;
   res.send(`Welcome ${userName}`);
 });
