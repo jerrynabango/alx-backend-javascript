@@ -11,15 +11,6 @@ app.get("/cart/:id([0-9]+)", (req, resp) => {
     resp.send(`Payment methods for cart ${req.params.id}`);
 });
 
-app.post("/login", (req, resp) => {
-    const userName = request.body.userName;
-    if (userName) {
-	resp.send(`Welcome ${userName}`);
-    } else {
-	resp.status(404).send();
-    }
-});
-
 app.get("/available_payments", (req, resp) => {
     resp.set("Content-Type", "application/json");
     const payMethods = {
@@ -29,6 +20,15 @@ app.get("/available_payments", (req, resp) => {
 	}
     }
     resp.send(payMethods);
+});
+
+app.post("/login", (req, resp) => {
+    const userName = request.body.userName;
+    if (userName) {
+	resp.send(`Welcome ${userName}`);
+    } else {
+	resp.status(404).send();
+    }
 });
 
 app.listen(port, () => {
