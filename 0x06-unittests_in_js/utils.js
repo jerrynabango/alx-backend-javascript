@@ -1,24 +1,24 @@
 class Utils {
     static calculateNumber(type, a, b) {
-        const roundedA = Math.round(a);
-        const roundedB = Math.round(b);
-        let ouput = 0;
-        switch (type) {
-            case 'SUM':
-                ouput = roundedA + roundedB;
-                break;
-            case 'SUBTRACT':
-                ouput = roundedA - roundedB;
-                break;
-            case 'DIVIDE':
-                if (roundedB === 0) {
-                    ouput = "Error";
-                } else {
-                    ouput = roundedA / roundedB;
-                }
-                break;
-        }
-        return ouput;
+	const an = Math.round(a);
+	const bn = Math.round(b);
+	let c = 0;
+	switch (type) {
+	case 'SUM':
+            c = an + bn;
+            break;
+	case 'SUBTRACT':
+            c = an - bn;
+            break;
+	case 'DIVIDE':
+	    if (bn === 0) {
+		c = "Error";
+	    } else {
+		c = an / bn;
+	    }
+	    break;
+	}
+	return c;
     }
 }
 
