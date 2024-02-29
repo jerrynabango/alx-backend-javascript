@@ -1,7 +1,7 @@
 const assert = require("assert");
 const Utils = require("./utils");
-const {describe, it} = require("mocha");
 const sinon = require("sinon");
+const {describe, it} = require("mocha");
 const sendPaymentRequestToApi = require("./3-payment");
 
 describe("sendPaymentRequestToApi", function() {
